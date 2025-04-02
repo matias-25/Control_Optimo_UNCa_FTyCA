@@ -43,10 +43,12 @@ for i=1:length(f)
        L=t(i); 
     end
 end
+
 %Las constantes PID
 Kp=1.2*T_/L;
 Ti=2*L;Ki=Kp/Ti;
 Td=0.5*L;Kd=Kp*Td;
+
 %PID
 A1=((2*Kp*h)+(Ki*(h^2))+(2*Kd))/(2*h);
 B1=(-2*Kp*h+Ki*(h^2)-4*Kd)/(2*h);
@@ -69,8 +71,36 @@ for j=0:h:(length(f)*h)-h;
   end
 end
 
+%constantes PID, con ajuste fino
+Kp=3;Ki=3;Kd=0.01;
+%PID
+A1=((2*Kp*h)+(Ki*(h^2))+(2*Kd))/(2*h);
+B1=(-2*Kp*h+Ki*(h^2)-4*Kd)/(2*h);
+C1=Kd/h;
+e=zeros(length(f),1);%error
+u=0;
+X=-[0;0];
+i=0;k=0;
+referencia=1; %%altura en metros del tanque 2
+for j=0:h:(length(f)*h)-h;
+  i=i+1;
+  k=i+2;
+  e(k)=referencia - X(2); %ERROR
+  u=u+A1*e(k)+B1*e(k-1)+C1*e(k-2); %PID
+  accion2(i)=u;
+  h2_2(i)=X(2);
+  for jj=0:h
+    X_P=A*X+B*u;
+    X=X+h*X_P;
+  end
+end
+
 figure(2);
 subplot(2,1,1);
-plot(t,accion);title('Accion');xlabel('tiempo[seg]');grid on;
+plot(t,accion,'b');
+title('Accion de control');xlabel('tiempo[seg]');grid on;hold on;
+plot(t,accion2,'r');legend('calculado','con ajuste');
 subplot(2,1,2);
-plot(t,h2);title('Salida del sistema');xlabel('tiempo[seg]');grid on;
+plot(t,h2,'b');
+title('Salida del sistema');xlabel('tiempo[seg]');grid on;hold on;
+plot(t,h2_2,'r');legend('calculado','con ajuste');
