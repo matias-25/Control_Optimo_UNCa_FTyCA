@@ -28,7 +28,7 @@ K=place(A,B,J)
 Acl = A - B * K;
 
 % Calcular los polos del sistema en lazo cerrado
-poles = eig(Acl);
+poles = eig(Acl)
 h=1/(10*max(abs(poles)));
 %Diseño control óptimo en tiempo continuo con un integrador en el lazo para 
 %referencia distinta de cero
@@ -38,8 +38,8 @@ X=[0 ; 0];
 A_amp=[A zeros(2,1);-C 0];
 B_amp=[B;0];
 C_amp=[0 1 0];
-%J_amp=[-6+1i -6-1i -1];color='b';
-J_amp=[-6+1i -6-1i -10];color='r';
+J_amp=[-6+1i -6-1i -1];color='b';
+%J_amp=[-6+1i -6-1i -10];color='r';
 K_amp=place(A_amp,B_amp,J_amp)
 i=0;
 ref=1; %%altura en metros del tanque 2
