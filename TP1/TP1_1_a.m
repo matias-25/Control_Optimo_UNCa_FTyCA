@@ -33,7 +33,7 @@ plot(t,f);title('Planta a Lazo Abierto');xlabel('tiempo[seg]');axis([0 5 -0.2 1.
 plot(p_inflex_t,p_inflex,'O');hold on
 plot(t,rec_tg,'r');
 
-%obtencion de L y T_ para calcular los par·metros del controlador PID
+%obtencion de L y T_ para calcular los par√°metros del controlador PID
 %con el primer metodo de Ziegler-Nichols
 for i=1:length(f)
     if 0.995<rec_tg(i) && 1.005>rec_tg(i)
