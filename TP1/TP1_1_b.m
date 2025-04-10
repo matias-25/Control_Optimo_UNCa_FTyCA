@@ -8,7 +8,7 @@ figure(1);
 sys=ss(A,B,C,D);
 rlocus(sys);
 
-%obtension de la ecuacion caraterística
+%obtension de la ecuacion caraterÃ­stica
 %|sI-A|=[s 0;  -  [-2  2;
     %    0 s]       2 -5]
 %|sI-A|= |s+2 -2; -2 s+5|=(s+2)(s+5)-(-2)*(-2)=s^2+5s+2s-4+10=s^2+7s+6  
@@ -20,7 +20,7 @@ J=[-6+1i -6-1i];
 %M=ctrb(A,B);
 %det_M=det(M);
 
-%Diseño mediante la Fórmula de Ackermann
+%DiseÃ±o mediante la FÃ³rmula de Ackermann
 Kack=acker(A,B,J);
 K=place(A,B,J)
 
@@ -30,7 +30,7 @@ Acl = A - B * K;
 % Calcular los polos del sistema en lazo cerrado
 poles = eig(Acl)
 h=1/(10*max(abs(poles)));
-%Diseño control óptimo en tiempo continuo con un integrador en el lazo para 
+%DiseÃ±o control Ã³ptimo en tiempo continuo con un integrador en el lazo para 
 %referencia distinta de cero
 tiempo=10/h;
 t=0:h:tiempo*h;
@@ -49,7 +49,7 @@ while(i<(tiempo))
   
   u=-K_amp*([X;psi]);%ley de control
   X_P=A*X+B*u;%X punto
-  X=X+h*X_P;%Esto es el cálculo de la integral como sumatoria
+  X=X+h*X_P;%Esto es el cÃ¡lculo de la integral como sumatoria
   psi=psi+h*(ref-C*X);
   
   i=i+1;
