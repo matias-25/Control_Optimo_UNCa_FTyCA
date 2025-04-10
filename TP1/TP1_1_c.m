@@ -12,7 +12,7 @@ B_amp=[B;0];
 %Q=diag([1 1 10]);color='b';
 Q=diag([1 10 1]);color='c';
 %Q=diag([1 1 1]);color='r';
-%Matriz R:Pondera la señal de control
+%Matriz R:Pondera la seÃ±al de control
 %R=0.1;
 R=1;
 K_amp=lqr(A_amp,B_amp,Q,R);
