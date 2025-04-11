@@ -29,7 +29,7 @@ referencia=1; %%altura en metros del tanque 2
 
 %%DLQR
 %%Primero discretizamos el sistema como:
-sys_D=c2d(sys,Ts,'zoh'); %%Ac√° va Ts.
+sys_D=c2d(sys,Ts,'zoh'); %%Ac· va Ts.
 Ad  = sys_D.a;
 Bd  = sys_D.b;
 Ctd = sys_D.c;
@@ -68,7 +68,7 @@ for ki=1:muestras
 
 end
 u(i)=u1(ki);
-%Imprimo como var√≠an mis variables de estado y mi entrada
+%Imprimo como varÌan mis variables de estado y mi entrada
 figure(1);
 subplot(3,1,1) ;plot(t,h1); title('altura del primer tanque');xlabel('tiempo [seg]'); grid on;
 subplot(3,1,2) ;plot(t,h2);xlabel('tiempo [seg]'); grid on; hold on;
