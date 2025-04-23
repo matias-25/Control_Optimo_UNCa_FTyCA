@@ -1,7 +1,7 @@
 % Generar una señal de ejemplo
 f=1000;
 fs=2*f;
-t = 0:1/fs:1; % Vector de tiempo [seg]
+t = 0:1/fs:5; % Vector de tiempo [seg]
 %signal = sin(2*pi*10*t); % Señal sinusoidal de 10 Hz
 rng(1);%para generar la misma señal aleatoria, es para version de MATLAB R2014
 signal = randn(length(t),1);
