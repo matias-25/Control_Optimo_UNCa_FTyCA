@@ -1,7 +1,8 @@
 clear all, close all;
 f=1000;
-fs=2*f;
+fs=10*f;
 t = 0:1/fs:1; % Vector de tiempo [seg]
+N = length(t);
 rng(1);%para generar la misma señal aleatoria, es para version de MATLAB R2014
 signal = randn(length(t),1);
 
@@ -9,12 +10,12 @@ signal = randn(length(t),1);
 [autocorr, lags] = xcorr(signal, 'coeff');
 
 %% Especificaciones del filtro
-orden = 4; % Orden del filtro
+orden = 5; % Orden del filtro
 %frecuencia_corte = 100; % Frecuencia de corte en Hz
 frecuencia_corte = 10; % Frecuencia de corte en Hz
 frecuencia_muestreo = fs; % Frecuencia de muestreo en Hz
 %% Diseño del filtro Butterworth
-[numerador, denominador] = butter(orden, frecuencia_corte/(frecuencia_muestreo/2), 'low');
+[numerador, denominador] = butter(orden, frecuencia_corte/(frecuencia_muestreo/10), 'low');
 
 %% Señales X,Y,Z,W
 X = filter(numerador, denominador, signal);%Señal X
@@ -47,7 +48,7 @@ xlabel('Tiempo (s)');
 ylabel('Amplitud');
 
 subplot(2,1,2);
-plot(lags, autocorr);
+plot(lags(N:2*N-1), autocorr(N:2*N-1));
 title('Autocorrelación ruido Blanco');grid on;
 xlabel('Lags');
 ylabel('Coeficiente de Autocorrelación');
@@ -61,7 +62,7 @@ xlabel('Tiempo (s)');
 ylabel('Amplitud');
 
 subplot(2,1,2);
-plot(lags_X, autocorr_X);
+plot(lags_X(N:2*N-1), autocorr_X(N:2*N-1));
 title('Autocorrelación X');grid on;
 xlabel('Lags');
 ylabel('Coeficiente de Autocorrelación X');
@@ -75,7 +76,7 @@ xlabel('Tiempo (s)');
 ylabel('Amplitud');
 
 subplot(2,1,2);
-plot(lags_Y,autocorr_Y,color);
+plot(lags_Y(N:2*N-1),autocorr_Y(N:2*N-1),color);
 title('Autocorrelación Y');grid on;hold on;
 xlabel('Lags');
 ylabel('Coeficiente de Autocorrelación Y');
@@ -89,7 +90,7 @@ xlabel('Tiempo (s)');
 ylabel('Amplitud');
 
 subplot(2,1,2);
-plot(lags_Z,autocorr_Z);
+plot(lags_Z(N:2*N-1),autocorr_Z(N:2*N-1));
 title('Autocorrelación Z');grid on;
 xlabel('Lags');
 ylabel('Coeficiente de Autocorrelación Z');
@@ -103,7 +104,7 @@ xlabel('Tiempo (s)');
 ylabel('Amplitud');
 
 subplot(2,1,2);
-plot(lags_W,autocorr_W);
-title('Autocorrelación W');grid on;
+plot(lags_W(N:2*N-1),autocorr_W(N:2*N-1));
+title('Autocorrelación W');grid on;axis([0 N-1 0 3]);
 xlabel('Lags');
 ylabel('Coeficiente de Autocorrelación W');
