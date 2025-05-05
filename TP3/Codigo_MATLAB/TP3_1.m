@@ -1,10 +1,10 @@
 f=1000;
 fs=2*f;
 t = 0:1/fs:5; % Vector de tiempo [seg]
-rng(1);%para generar la misma se馻l aleatoria, es para version de MATLAB R2014
+rng(1);%para generar la misma se帽al aleatoria, es para version de MATLAB R2014
 signal = randn(length(t),1);
 
-%% Calcular la autocorrelaci髇 del ruido "blanco"
+%% Calcular la autocorrelaci贸n del ruido "blanco"
 [autocorr, lags] = xcorr(signal, 'coeff');
 
 %% Especificaciones del filtro
@@ -12,11 +12,11 @@ orden = 4; % Orden del filtro
 %frecuencia_corte = 100; % Frecuencia de corte en Hz
 frecuencia_corte = 10; % Frecuencia de corte en Hz
 frecuencia_muestreo = fs; % Frecuencia de muestreo en Hz
-%% Dise駉 del filtro Butterworth
+%% Dise帽o del filtro Butterworth
 [numerador, denominador] = butter(orden, frecuencia_corte/(frecuencia_muestreo/2), 'low');
 
-%% Se馻les X,Y,Z,W
-X = filter(numerador, denominador, signal);%Se馻l X
+%% Se帽ales X,Y,Z,W
+X = filter(numerador, denominador, signal);%Se帽al X
 f=3; %[Hz]
 Y = 0.5+0.5*square(2*pi*f*t,50);
 Z =5 * ones(size(t));
@@ -25,20 +25,20 @@ W = zeros(1,length(t));
         W(i)= X(i)+Y(i)+Z(i);
     end
 
-%% Calcular la autocorrelaci髇 X
+%% Calcular la autocorrelaci贸n X
 [autocorr_X, lags_X] = xcorr(X, 'coeff');
 
-%% Calcular la autocorrelaci髇 Y
+%% Calcular la autocorrelaci贸n Y
 [autocorr_Y, lags_Y] = xcorr(Y,'unbiased');color='r';
 
 %% Se prueba otra funcion para calcular la autocorrelacion Y
 % Longitud de los datos
 %N = length(Y);
-% Inicializar el vector de autocorrelaci髇
+% Inicializar el vector de autocorrelaci贸n
 %autocorr_Y_ = zeros(1, N);
 % Calcular la media de los datos
 %mean_data = mean(Y);
-% Calcular la autocorrelaci髇
+% Calcular la autocorrelaci贸n
 %for lag = 0:N-1
 %    sum_product = 0;
 %    for i = 1:N-lag
@@ -46,23 +46,23 @@ W = zeros(1,length(t));
 %    end
 %    autocorr_Y_(lag + 1) = sum_product / (N - lag);
 %end
-% Normalizar la autocorrelaci髇
+% Normalizar la autocorrelaci贸n
 %autocorr_Y_ = autocorr_Y_ / autocorr_Y_(1);
 %N_=length(autocorr_Y_);
 %autocorr_Y=[flip(autocorr_Y_) autocorr_Y_(1:N-1)];color='b';
 %lags_Y=lag*2+1;
 
-%% Calcular la autocorrelaci髇 Z
+%% Calcular la autocorrelaci贸n Z
 [autocorr_Z, lags_Z] = xcorr(Z,'unbiased');
 
 %% Se prueba otra funcion para calcular la autocorrelacion Z
 % Longitud de los datos
 N = length(Z);
-% Inicializar el vector de autocorrelaci髇
+% Inicializar el vector de autocorrelaci贸n
 autocorr_Z_ = zeros(1, N);
 % Calcular la media de los datos
 mean_data = mean(Z);
-% Calcular la autocorrelaci髇
+% Calcular la autocorrelaci贸n
 %for lag = 0:N-1
 %    sum_product = 0;
 %    for i = 1:N-lag
@@ -70,16 +70,16 @@ mean_data = mean(Z);
 %    end
 %    autocorr_Z_(lag + 1) = sum_product / (N - lag);
 %end
-% Normalizar la autocorrelaci髇
+% Normalizar la autocorrelaci贸n
 %autocorr_Z_ = autocorr_Z_ / autocorr_Z_(1);
 
 %autocorr_Z=[flip(autocorr_Z_) autocorr_Z_(1:N-1)];
 %lags_Y=lag*2+1;
 
-%% Calcular la autocorrelaci髇 Z
+%% Calcular la autocorrelaci贸n Z
 [autocorr_W, lags_W] = xcorr(W,'unbiased');
 
-%% Graficar la se馻l original y su autocorrelaci髇
+%% Graficar la se帽al original y su autocorrelaci贸n
 figure(1);
 subplot(2,1,1);
 plot(t, signal);
@@ -89,11 +89,11 @@ ylabel('Amplitud');
 
 subplot(2,1,2);
 plot(lags, autocorr);
-title('Autocorrelaci髇 ruido Blanco');grid on;
+title('Autocorrelaci贸n ruido Blanco');grid on;
 xlabel('Lags');
-ylabel('Coeficiente de Autocorrelaci髇');
+ylabel('Coeficiente de Autocorrelaci贸n');
 
-%% Graficar la se馻l X y su autocorrelaci髇
+%% Graficar la se帽al X y su autocorrelaci贸n
 figure(2);
 subplot(2,1,1);
 plot(t, X);
@@ -103,11 +103,11 @@ ylabel('Amplitud');
 
 subplot(2,1,2);
 plot(lags_X, autocorr_X);
-title('Autocorrelaci髇 X');grid on;
+title('Autocorrelaci贸n X');grid on;
 xlabel('Lags');
-ylabel('Coeficiente de Autocorrelaci髇 X');
+ylabel('Coeficiente de Autocorrelaci贸n X');
 
-%% Graficar la se馻l Y y su autocorrelaci髇
+%% Graficar la se帽al Y y su autocorrelaci贸n
 figure(3);
 subplot(2,1,1);
 plot(t, Y);
@@ -117,11 +117,11 @@ ylabel('Amplitud');
 
 subplot(2,1,2);
 plot(lags_Y,autocorr_Y,color);
-title('Autocorrelaci髇 Y');grid on;hold on;
+title('Autocorrelaci贸n Y');grid on;hold on;
 xlabel('Lags');
-ylabel('Coeficiente de Autocorrelaci髇 Y');
+ylabel('Coeficiente de Autocorrelaci贸n Y');
 
-%% Graficar la se馻l Z y su autocorrelaci髇
+%% Graficar la se帽al Z y su autocorrelaci贸n
 figure(4);
 subplot(2,1,1);
 plot(t, Z);
@@ -132,11 +132,11 @@ ylabel('Amplitud');
 subplot(2,1,2);
 %plot(lags_Z,autocorr_Z);
 plot(autocorr_Z);
-title('Autocorrelaci髇 Z');grid on;
+title('Autocorrelaci贸n Z');grid on;
 xlabel('Lags');
-ylabel('Coeficiente de Autocorrelaci髇 Z');
+ylabel('Coeficiente de Autocorrelaci贸n Z');
 
-%% Graficar la se馻l W y su autocorrelaci髇
+%% Graficar la se帽al W y su autocorrelaci贸n
 figure(5);
 subplot(2,1,1);
 plot(t, W);
@@ -147,6 +147,6 @@ ylabel('Amplitud');
 subplot(2,1,2);
 %plot(lags_W,autocorr_W);
 plot(autocorr_W);
-title('Autocorrelaci髇 W');grid on;
+title('Autocorrelaci贸n W');grid on;
 xlabel('Lags');
-ylabel('Coeficiente de Autocorrelaci髇 W');
+ylabel('Coeficiente de Autocorrelaci贸n W');
