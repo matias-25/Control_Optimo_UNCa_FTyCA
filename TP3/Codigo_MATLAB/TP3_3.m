@@ -1,13 +1,14 @@
 clear all;close all;
 %% Se define f(t) original
 %% Parametros
-f = 1; %frecuencia de la señal
+f = 4; %frecuencia de la señal
 fs = 1000*f; %frecuencia de muestreo
-t_F = 3; %tiempo final en [seg]
+t_F = 1; %tiempo final en [seg]
 t = 0:1/fs:t_F; % Vector de tiempo [seg]
-A = 5; %Amplitud
-d = 0.5; %desplazamiento
+A = 3; %Amplitud
 T = 1/f; % Periodo
+d = 0.5*T; %desplazamiento
+
 %señal f
 f_t = (A/2)+(A/2)*square(2*pi*f*(t+(d/2)),50);
 %Grafico
@@ -31,10 +32,12 @@ for n =0:N
   vector_frecuencia(n+1)= n;  
 end
 modudo_Fn= abs(F)/max(abs(F));
+f_aux = 0:1/fs:N; % Crear el vector f_aux
+Sinc_f = abs(sinc(d * f .* f_aux)); % Calcular Sinc_f
 %Grafico Módulo de F
 figure(2);
-plot(vector_frecuencia, modudo_Fn ,'*r'); title('Espectro en frecuencias  F_n'); xlabel('frecuencia');
-
+plot(vector_frecuencia, modudo_Fn ,'*r');hold on; title('Espectro en frecuencias  F_n'); xlabel('frecuencia');
+plot(f_aux,Sinc_f, 'b');
 %% Serie de Fourier
 % Como exp(n*w0*1i*t)= cos(n*w0*t)+isen(n*w0*t)
 % Entonces f(t) = F(n)*(cos(n*w0*t)+isen(n*w0*t));
