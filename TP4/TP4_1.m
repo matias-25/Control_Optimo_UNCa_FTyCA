@@ -10,14 +10,14 @@ fs = 1/At;
 sys_d = c2d(sys_c,At,'zoh');
 num_d = sys_d.num{1}; den_d=sys_d.den{1};
 
-%% Funci髇 temporal entrada x: Ruido blanco media cero y varianza unidad
+%% Funci贸n temporal entrada x: Ruido blanco media cero y varianza unidad
 t = 0:At:10;
-N = length(t); % N鷐ero de muestras
+N = length(t); % N煤mero de muestras
 randn('state',0); x=sqrt(1)*randn(1,N);
 %rng(2);
 %ruido_blanco = randn(1, N); % Genera ruido blanco con media 0 y varianza 1
 
-%% Autocorrelaci髇 x
+%% Autocorrelaci贸n x
 %Calculo de la correlacion entre se?ales digitalizadas
 N=length(x);Tmax=N*At;t=At:At:Tmax;
 % W=N/(2*Tmax);
@@ -50,15 +50,15 @@ w0=2*pi*(Af:Af:fmax);
 
 %% Graficos autocorrelacion  x y autoespectro x
 figure(1);
-subplot(3,1,1);plot(t,x,'.-k');title('Funci髇 temporal');xlabel('Tiempo [seg.]');
+subplot(3,1,1);plot(t,x,'.-k');title('Funci贸n temporal');xlabel('Tiempo [seg.]');
 ylabel('$x_t$','interpreter','latex','Rotation',0);
-subplot(3,1,2);plot(t,fixx(1:N));title('Autocorrelaci髇');xlabel('Tiempo [seg.]');
+subplot(3,1,2);plot(t,fixx(1:N));title('Autocorrelaci贸n');xlabel('Tiempo [seg.]');
 ylabel('$\phi_{xx}$','interpreter','latex','Rotation',0);
 subplot(3,1,3);plot(w0(1:M1/2),abs(Sx(1:M1/2)),'k');
 hold on;title('Densidad de potencia autoespectro x');xlabel('Frec. [rad/seg]');
 ylabel('$S_x(j\omega)$','interpreter','latex','Rotation',0);
 
-%% Funci髇 temporal salida y
+%% Funci贸n temporal salida y
 %Ingreso x al sistema lineal discreto
 num_d=sys_d.num{1};
 den_d=sys_d.den{1};y=zeros(size(x));
@@ -69,7 +69,7 @@ for n=Orn:length(x)
 %     y(n)=    num_d(1)*x(n)+num_d(2)*x(n-1)-(den_d(2)*y(n-1));
 end
 
-%% Inter correlaci髇 x y
+%% Inter correlaci贸n x y
 %valor para tao=0:Correlacion cruzada xy
 fixy=zeros(1,N);fixy(1)=x*y';
 for j=1:N-1
@@ -91,14 +91,14 @@ Sxy=Sxy/M1;
 
 %% Graficos temporal , correlacion   y interespectro
 figure(2);
-subplot(3,1,1);plot(t,y,'.-k');title('Funci髇 temporal');xlabel('Tiempo [seg.]');
+subplot(3,1,1);plot(t,y,'.-k');title('Funci贸n temporal');xlabel('Tiempo [seg.]');
 ylabel('$y_t$','interpreter','latex','Rotation',0);
-subplot(3,1,2);plot(t,fixy(1:N));title('Inter correlaci髇 x y');xlabel('Tiempo [seg.]');
+subplot(3,1,2);plot(t,fixy(1:N));title('Inter correlaci贸n x y');xlabel('Tiempo [seg.]');
 ylabel('$\phi_{xy}$','interpreter','latex','Rotation',0);
 subplot(3,1,3);plot(w0(1:M1/2),abs(Sxy(1:M1/2)),'k');hold on;title('Densidad de potencia interespectro');xlabel('Frec. [rad/seg]');
 ylabel('$S_{xy}(j\omega)$','interpreter','latex','Rotation',0);
 
-%% Magnitud y Fase, diagrama de Bode num閞ico 
+%% Magnitud y Fase, diagrama de Bode num茅rico 
 %Magnitud
 F_jw=(Sxy)./(Sx);
 [MAG,PHASE,W]=bode(sys_c,{1e-1,fmax*2*pi});
@@ -121,7 +121,7 @@ for ii=1:length(delta_fase)
 end
 fase_c=[0 cumsum(delta_fase)];
 
-%% Graficos Magnitud y fase originales y por bode num閞ico
+%% Graficos Magnitud y fase originales y por bode num茅rico
 figure(3);
 subplot(2,1,1);semilogx(W,H,'b');hold on;
 semilogx(w0(1:M1/4),20*log10(abs(F_jw(1:M1/4))),'.k');hold on;
