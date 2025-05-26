@@ -11,12 +11,25 @@ sys_d = c2d(sys_c,At,'zoh');
 num_d = sys_d.num{1};
 den_d=sys_d.den{1};
 
-%% Función temporal entrada x: Ruido blanco media cero y varianza unidad
-t = 0:At:20;
-N = length(t); % Número de muestras
-randn('state',0); x=sqrt(1)*randn(1,N);
-%rng(2);
-%ruido_blanco = randn(1, N); % Genera ruido blanco con media 0 y varianza 1
+%% Generación de una señal PRBS 7 y 15
+m=15;
+x=ones(m+1,1); %Registro inicial
+
+N=5000; %Puntos de la PRBS para muestrear
+el=5;
+for k=1:el:N
+    for h=m:-1:1
+        x(h+1)=x(h);    
+    end
+     if m == 7
+        x(1)=xor(x(6),x(5));    %PRBS 7: x^7 + x^6 + 1
+    end
+    if m == 15
+        x(1)=xor(x(14),x(13));  %PRBS 15: x^15 + x^14 + 1
+    end
+    y(k:k+el-1)=x(m+1);
+end
+x=(2*y(1:N)-1);
 
 %% Autocorrelación x
 %Calculo de la correlacion entre se?ales digitalizadas
