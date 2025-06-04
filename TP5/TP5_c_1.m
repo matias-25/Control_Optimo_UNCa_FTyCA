@@ -11,8 +11,8 @@ sys_d = c2d(sys_c,At,'zoh');
 num_d = sys_d.num{1};
 den_d=sys_d.den{1};
 
-%% Señales de entrada y salida REALES
-% Señal de entrada Real
+%% SeÃ±ales de entrada y salida REALES
+% SeÃ±al de entrada Real
 
 tf=5000*At;
 t=0:At:tf;
@@ -31,10 +31,10 @@ x=(2*y(1:N)-1);
 
 %Grafico
 %figure;
-%plot(t,x,'.-k');title('Función temporal x_t');xlabel('Tiempo [seg.]');
+%plot(t,x,'.-k');title('FunciÃ³n temporal x_t');xlabel('Tiempo [seg.]');
 %ylabel('$x_t$','interpreter','latex','Rotation',0);grid on;
 
-% Señal de Salida REAL
+% SeÃ±al de Salida REAL
 % Ingreso x al sistema lineal discreto
 
 y_D=zeros(size(x));
@@ -49,9 +49,9 @@ end
 [y_D_lsim,t_D]=lsim(sys_d,x,t); % Sistema discreto
 y= y_D_lsim;
 %% Bode Numerico
-% Para tener una nocion del tamaño del sistema
+% Para tener una nocion del tamaÃ±o del sistema
 
-% Autocorrelación x
+% AutocorrelaciÃ³n x
 %Calculo de la correlacion entre se?ales digitalizadas
 
 fmax=fs/2; Af=fmax/(.5*N);w1=0:Af:fmax-Af;
@@ -81,7 +81,7 @@ Sx=Sx/M1;
 Af=2*fmax/M1;
 w0=2*pi*(Af:Af:fmax);
 
-% Inter correlación x y
+% Inter correlaciÃ³n x y
 %valor para tao=0:Correlacion cruzada xy
 fixy=zeros(1,N);fixy(1)=x*y;
 for j=1:N-1
@@ -103,14 +103,14 @@ Sxy=Sxy/M1;
 
 % Graficos temporal , correlacion   y interespectro
 figure;
-subplot(3,1,1);plot(t,y,'.-k');title('Función temporal Salida');xlabel('Tiempo [seg.]');
+subplot(3,1,1);plot(t,y,'.-k');title('FunciÃ³n temporal Salida');xlabel('Tiempo [seg.]');
 ylabel('$y_t$','interpreter','latex','Rotation',0);grid on;
-subplot(3,1,2);plot(t,fixy(1:N));title('Inter correlación x y');xlabel('Tiempo [seg.]');
+subplot(3,1,2);plot(t,fixy(1:N));title('Inter correlaciÃ³n x y');xlabel('Tiempo [seg.]');
 ylabel('$\phi_{xy}$','interpreter','latex','Rotation',0);grid on;
 subplot(3,1,3);plot(w0(1:M1/2),abs(Sxy(1:M1/2)),'k');hold on;title('Densidad de potencia interespectro');xlabel('Frec. [rad/seg]');
 ylabel('$S_{xy}(j\omega)$','interpreter','latex','Rotation',0);grid on;
 
-% Magnitud y Fase, diagrama de Bode numérico 
+% Magnitud y Fase, diagrama de Bode numÃ©rico 
 %Magnitud
 F_jw=(Sxy)./(Sx);
 [MAG,PHASE,W]=bode(sys_c,{1e-1,fmax*2*pi});
@@ -134,7 +134,7 @@ end
 fase_c=[0 cumsum(delta_fase)];
 
 
-% Graficos Magnitud y fase originales y por bode numérico
+% Graficos Magnitud y fase originales y por bode numÃ©rico
 figure;
 subplot(2,1,1);semilogx(W,H,'b');hold on;
 semilogx(w0(1:M1/4),20*log10(abs(F_jw(1:M1/4))),'.k');hold on;
@@ -149,15 +149,15 @@ title('$-\arctan({\frac{Im(F(j\omega))}{Re(F(j\omega))}})$','interpreter','latex
 ylabel('Fase ');grid on;
 
 
-%% Señales de entrada y salida MEDIDAS
-% Señal de entrada Medida
-% Señal de Salida Medida
+%% SeÃ±ales de entrada y salida MEDIDAS
+% SeÃ±al de entrada Medida
+% SeÃ±al de Salida Medida
 
 
 %% Funcion de Transferencia del Sistema Estimado
 
-%% Señales de entrada y salida FT ESTIMADA
-% Señal de entrada Medida
-% Señal de Salida Medida
+%% SeÃ±ales de entrada y salida FT ESTIMADA
+% SeÃ±al de entrada Medida
+% SeÃ±al de Salida Medida
 
 %% Graficos
