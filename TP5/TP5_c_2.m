@@ -1,6 +1,6 @@
-%% Ajuste por mínimos cuadrados. Algoritmo que se emplea luego del analisis
-% de correlación y densidad espectral de potencia.
-% Éste algoritmo funciona porque se ha ajustado a la señal de entrada y al
+%% Ajuste por mÃ­nimos cuadrados. Algoritmo que se emplea luego del analisis
+% de correlaciÃ³n y densidad espectral de potencia.
+% Ã‰ste algoritmo funciona porque se ha ajustado a la seÃ±al de entrada y al
 % tiempo de muestro a valores adecuados.
 clear all; close all;
 Med=2500;
@@ -10,7 +10,7 @@ orden_a=2; %Orden del Denominador
 t=0:ts:20000*ts;
 
 
-% Señal de entrada
+% SeÃ±al de entrada
 StepAmplitude=1;
 %ue=StepAmplitude*sign(sin(2*pi*.2*1.0*t));
 ue=zeros(length(t));
@@ -84,7 +84,7 @@ subplot(2,1,2)
 hold on; grid on;
 plot(t_D*ts,y_D,'.');
 plot(t_sal*ts,y_sal,'k');legend('Real','Identificada')
-title('Desempeño del modelo ajustado');xlabel('Tiempo. [Seg.]')
+title('DesempeÃ±o del modelo ajustado');xlabel('Tiempo. [Seg.]')
 
 %% Respuesta al escalon
 %t2=0:0.02:5;
