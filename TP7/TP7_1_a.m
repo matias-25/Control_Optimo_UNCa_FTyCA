@@ -11,7 +11,7 @@ u(1)=0; %accion de control
 x= [d(1);d_p(1);fi(1);fi_p(1)];
 x0=x;
 
-%Versi髇 linealizada en el equilibrio inestable. Sontag Pp 104. 
+%Versi贸n linealizada en el equilibrio inestable. Sontag Pp 104. 
 Mat_Ac=[0 1 0 0;0 -Fricc/M -m*g/M 0;0 0 0 1;0 Fricc/(long*M) g*(m+M)/(long*M) 0];
 Mat_Bc=[0; 1/M; 0; -1/(long*M)];
 Mat_Cc=[1 0 0 0; 0 0 1 0];
@@ -29,20 +29,20 @@ Mat_Bd=sys_d.b;
 Mat_Cd=sys_d.c;
 
 %% controlador DLQG
-Q=diag([1e2 1e1 1e6 1e1]);R=1e1;%Matrices de dise駉 del controlador DLQG
+Q=diag([1e2 1e1 1e6 1e1]);R=1e1;%Matrices de dise帽o del controlador DLQG
 Kdlqr = dlqr(Mat_Ad,Mat_Bd,Q,R); %ganacia del controlador
 disp('Polos de dlqr en:')
 Ea=eig(Mat_Ad-Mat_Bd*Kdlqr)
 
 %% Obsevador de Luenberger
-%C醠culo del Observador--------------------------------------------------- 
+%C谩lculo del Observador--------------------------------------------------- 
 A_o=Mat_Ad'; 
 B_o=Mat_Cd'; 
 C_o=Mat_Bd'; 
 Qo=diag([1e0 1e0 1e0 1e0]);Ro=diag([1e-1, 1e-1]); 
 Ko= (dlqr(A_o,B_o,Qo,Ro))'; %ganancia del observador
 %%
-Qcomp=eye(4);%Para comparar el desempe駉 de los controladores
+Qcomp=eye(4);%Para comparar el desempe帽o de los controladores
 %% Monte Carlo
 % Consigna 0, 0.01, 0.02, 0.05 y 0.1
 sQ=0.1; %Para F
@@ -50,7 +50,7 @@ sR=0.1; %Para G. Covarianza del ruido de medicion sigma=sqrt(sR)
 F_=sQ*eye(4); %Covarianza del ruido de estado Sigma=sqrt(sQ)
 G_=sR;
 S=Q;
-P=S; %condici髇 inicial de P
+P=S; %condici贸n inicial de P
 kmax=2000;
 Realizaciones=50; %Cantidad de realizaciones para el Monte Carlo.
 Kx=zeros(kmax,4);
@@ -84,13 +84,13 @@ for h_k=1:5000
     P33(h_k)=P_Kalman(3,3);
     P44(h_k)=P_Kalman(4,4);
 end
-% figure(4);semilogy(P11);hold on;semilogy(P22,'g');semilogy(P33,'c');semilogy(P44,'r');title('Evoluci髇 de P_1_1,P_2_2,P_3_3 y P_4_4.')
+% figure(4);semilogy(P11);hold on;semilogy(P22,'g');semilogy(P33,'c');semilogy(P44,'r');title('Evoluci贸n de P_1_1,P_2_2,P_3_3 y P_4_4.')
 % xlabel('Iteraciones');
 disp('Polos de Kalman en:')
 EK=abs(eig(Mat_Ad-K_Kalman*Mat_Cd))
 %%
 for trial=1:Realizaciones %Empieza el Monte Carlo
-    v=randn(4,kmax);%Se馻les aleatorios de media nula y varianza unidad.
+    v=randn(4,kmax);%Se帽ales aleatorios de media nula y varianza unidad.
     w=randn(2,kmax);
     x=x0+F_*v(:,1);
     x_hat=[0;0;0;0];% variables estado observador 
@@ -124,15 +124,15 @@ Jn=mean(Jn_);disp(['El valor de costo es Jn(end)=' num2str(Jn(end)) '.fi(1)=' nu
 t=t*Ts;
 TamanioFuente=14;
 figure;
-subplot(3,2,2);hold on;grid on;title('羘gulo \phi','FontSize',TamanioFuente);
+subplot(3,2,2);hold on;grid on;title('脕ngulo \phi','FontSize',TamanioFuente);
 plot(t,mean(fi),'b');plot(t,mean(fi)+.5*sqrt(var(fi)),'r');plot(t,mean(fi)-.5*sqrt(var(fi)),'r');
-subplot(3,2,4);hold on;grid on; title('Velocidad 醤gulo \phi_p','FontSize',TamanioFuente);
+subplot(3,2,4);hold on;grid on; title('Velocidad 谩ngulo \phi_p','FontSize',TamanioFuente);
 plot(t,mean(fi_p),'b');plot(t,mean(fi_p)+.5*sqrt(var(fi_p)),'r');plot(t,mean(fi_p)-.5*sqrt(var(fi_p)),'r');
-subplot(3,2,1);hold on; grid on;title('Posici髇 carro \delta','FontSize',TamanioFuente);hold on;
+subplot(3,2,1);hold on; grid on;title('Posici贸n carro \delta','FontSize',TamanioFuente);hold on;
 plot(t,mean(d),'b');plot(t,mean(d)+.5*sqrt(var(d)),'r');plot(t,mean(d)-.5*sqrt(var(d)),'r');
 subplot(3,2,3);hold on; grid on;title('Velocidad carro \delta_p','FontSize',TamanioFuente);hold on;
 plot(t,mean(d_p),'b');plot(t,mean(d_p)+.5*sqrt(var(d_p)),'r');plot(t,mean(d_p)-.5*sqrt(var(d_p)),'r');
-subplot(3,1,3); grid on;title('Acci髇 de control','FontSize',TamanioFuente);xlabel('Tiempo en Seg.','FontSize',TamanioFuente);hold on;
+subplot(3,1,3); grid on;title('Acci贸n de control','FontSize',TamanioFuente);xlabel('Tiempo en Seg.','FontSize',TamanioFuente);hold on;
 plot(t,mean(u),'b');plot(t,mean(u)+.5*sqrt(var(u)),'r');plot(t,mean(u)-.5*sqrt(var(u)),'r');
 % ylim([-1000 1000]);
 % figure;
