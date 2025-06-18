@@ -12,7 +12,7 @@ u(1)=0; %accion de control
 x= [alfa(1);fhi(1);fhi_p(1);h(1)];
 x0=x;
 
-%Versi贸n linealizada del avion x=[alfa;fi;fi_p;h]
+%Versi髇 linealizada del avion x=[alfa;fi;fi_p;h]
 %alfa= direccion de vuelo, fi= angulo cabeceo (piloto) , 
 %fi_p = velocidad angulo cabeceo, h= altura
 Mat_Ac=[-a a 0 0;0 0 1 0; w^2 -w^2 0 0; c 0 0 0];
@@ -33,20 +33,20 @@ Mat_Bd=sys_d.b;
 Mat_Cd=sys_d.c;
 
 %% controlador DLQG
-Q=diag([1e2 1e6 1e0 1e1]);R=1e5;%Matrices de dise帽o del controlador DLQG
+Q=diag([1e2 1e6 1e0 1e1]);R=1e5;%Matrices de dise駉 del controlador DLQG
 Kdlqr = dlqr(Mat_Ad,Mat_Bd,Q,R); %ganacia del controlador
 disp('Polos de dlqr en:')
 Ea=eig(Mat_Ad-Mat_Bd*Kdlqr)
 
 %% Obsevador de Luenberger
-%C谩lculo del Observador--------------------------------------------------- 
+%C醠culo del Observador--------------------------------------------------- 
 A_o=Mat_Ad'; 
 B_o=Mat_Cd'; 
 C_o=Mat_Bd'; 
 Qo=diag([1e-3 1e-3 1e-2 1e-3]);Ro=diag([1e3 1e2]); 
 Ko= dlqr(A_o,B_o,Qo,Ro); %ganancia del observador
 %%
-Qcomp=eye(4);%Para comparar el desempe帽o de los controladores
+Qcomp=eye(4);%Para comparar el desempe駉 de los controladores
 %% Monte Carlo
 % Consigna 0, 0.01, 0.02, 0.05 y 0.1
 sQ=0.1; %Para F
@@ -54,7 +54,7 @@ sR=0.1; %Para G. Covarianza del ruido de medicion sigma=sqrt(sR)
 F_=sQ*eye(4); %Covarianza del ruido de estado Sigma=sqrt(sQ)
 G_=sR;
 S=Q;
-P=S; %condici贸n inicial de P
+P=S; %condici髇 inicial de P
 kmax=100;
 Realizaciones=50; %Cantidad de realizaciones para el Monte Carlo.
 Kx=zeros(kmax,4);
@@ -88,7 +88,7 @@ for h_k=1:5000
     P33(h_k)=P_Kalman(3,3);
     P44(h_k)=P_Kalman(4,4);
 end
-% figure(4);semilogy(P11);hold on;semilogy(P22,'g');semilogy(P33,'c');semilogy(P44,'r');title('Evoluci贸n de P_1_1,P_2_2,P_3_3 y P_4_4.')
+% figure(4);semilogy(P11);hold on;semilogy(P22,'g');semilogy(P33,'c');semilogy(P44,'r');title('Evoluci髇 de P_1_1,P_2_2,P_3_3 y P_4_4.')
 % xlabel('Iteraciones');
 aux_K_Kalman1= K_Kalman;
 disp('Polos de Kalman en:')
@@ -96,7 +96,7 @@ EK=abs(eig(Mat_Ad-K_Kalman*Mat_Cd))
 
 %%
 for trial=1:Realizaciones %Empieza el Monte Carlo
-    v=randn(4,kmax);%Se帽ales aleatorios de media nula y varianza unidad.
+    v=randn(4,kmax);%Se馻les aleatorios de media nula y varianza unidad.
     w=randn(2,kmax);
     x=x0+F_*v(:,1);
     x_hat=[0;0;0;0];% variables estado observador 
@@ -165,7 +165,7 @@ for trial=1:Realizaciones %Empieza el Monte Carlo
         h(trial,ki+1)=x(4);
     end
     Jn_(trial,ki+1)=Jn_(trial,ki+1)+x'*S*x;
-%     u(trial,ki+1)=-Kx(1,:)*[x_hat]-Kv(1,:)*[v(:,ki)];
+    u(trial,ki+1)=-Kx(1,:)*[x_hat]-Kv(1,:)*[v(:,ki)];
 %     uaux=-Kx(1,:) *x_hat; 
 %     if abs(uaux)>.5
 %         u(trial,ki+1)=.5*sign(uaux);
@@ -187,11 +187,12 @@ TamanioFuente=14;
 figure;
 subplot(3,2,1);hold on;grid on; title('Altura avion h','FontSize',TamanioFuente);
 plot(t,mean(h),'b');plot(t,mean(h)+.5*sqrt(var(h)),'r');plot(t,mean(h)-.5*sqrt(var(h)),'r');
-subplot(3,2,2);hold on; grid on;title('脕ngulo cabeceo \phi','FontSize',TamanioFuente);hold on;
+subplot(3,2,2);hold on; grid on;title('羘gulo cabeceo \phi','FontSize',TamanioFuente);hold on;
 plot(t,mean(fhi),'b');plot(t,mean(fhi)+.5*sqrt(var(fhi)),'r');plot(t,mean(fhi)-.5*sqrt(var(fhi)),'r');
-subplot(3,2,4);hold on;grid on;title('Velocidad 脕ngulo cabeceo\phi_p','FontSize',TamanioFuente);
+subplot(3,2,4);hold on;grid on;title('Velocidad 羘gulo cabeceo\phi_p','FontSize',TamanioFuente);
 plot(t,mean(fhi_p),'b');plot(t,mean(fhi_p)+.5*sqrt(var(fhi_p)),'r');plot(t,mean(fhi_p)-.5*sqrt(var(fhi_p)),'r');
-subplot(3,2,3);hold on; grid on;title('脕ngulo de vuelo \alpha','FontSize',TamanioFuente);hold on;
+subplot(3,2,3);hold on; grid on;title('羘gulo de vuelo \alpha','FontSize',TamanioFuente);hold on;
 plot(t,mean(alfa),'b');plot(t,mean(alfa)+.5*sqrt(var(alfa)),'r');plot(t,mean(alfa)-.5*sqrt(var(alfa)),'r');
-subplot(3,1,3); grid on;title('Acci贸n de control','FontSize',TamanioFuente);xlabel('Tiempo en Seg.','FontSize',TamanioFuente);hold on;
+subplot(3,1,3); grid on;title('Acci髇 de control','FontSize',TamanioFuente);xlabel('Tiempo en Seg.','FontSize',TamanioFuente);hold on;
 plot(t,mean(u),'b');plot(t,mean(u)+.5*sqrt(var(u)),'r');plot(t,mean(u)-.5*sqrt(var(u)),'r');
+disp(['tiempo de ejecucion :' num2str(toc) ' [seg].']);
