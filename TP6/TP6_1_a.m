@@ -1,11 +1,15 @@
-clear all;%close all; 
+clear all;close all; 
+tic;
 %% Constantes del sistema
 m=.1;Fricc=0.1; long=0.6;g=9.8;M=.5; 
 
 %Condiciones iniciales
 d(1)=0;
 d_p(1)=0;
-fi(1)=0.5;
+% fi(1)=0.1;
+% fi(1)=0.3;
+% fi(1)=0.5;
+fi(1)=0.9;
 fi_p(1)=0;
 u(1)=0; %accion de control 
 x= [d(1);d_p(1);fi(1);fi_p(1)];
@@ -29,8 +33,10 @@ Mat_Bd=sys_d.b;
 Mat_Cd=sys_d.c;
 
 %% controlador DLQG
-Q=diag([1e2 1e1 1e6 1e1]);R=1e1;%Matrices de diseño del controlador DLQG
+Q=diag([1e2 1e1 1e6 1e1]);R=1e0;%Matrices de diseño del controlador DLQG
 Kdlqr = dlqr(Mat_Ad,Mat_Bd,Q,R); %ganacia del controlador
+disp('Polos de dlqr en:')
+Ea=eig(Mat_Ad-Mat_Bd*Kdlqr)
 
 %% Obsevador de Luenberger
 %Cálculo del Observador--------------------------------------------------- 
@@ -42,9 +48,10 @@ Ko= (dlqr(A_o,B_o,Qo,Ro))'; %ganancia del observador
 %%
 Qcomp=eye(4);%Para comparar el desempeño de los controladores
 %% Monte Carlo
-% Consigna 0, 0.01, 0.02, 0.05 y 0.1
-sQ=0.05; %Para F
-sR=0.05; %Para G. Covarianza del ruido de medicion sigma=sqrt(sR)
+% Con sigma 0, 0.01, 0.02, 0.05 y 0.1
+sigma= 0.1;
+sQ=sigma; %Para F
+sR=sigma; %Para G. Covarianza del ruido de medicion sigma=sqrt(sR)
 F_=sQ*eye(4); %Covarianza del ruido de estado Sigma=sqrt(sQ)
 G_=sR;
 S=Q;
@@ -69,7 +76,7 @@ for hi=kmax-1:-1:1
     %Ea(:,hi)=eig(Aa-Ba*Kx(hi,:));
 end
 % Kx= Kdlqr;
-Ea=eig(Aa-Ba*Kdlqr)
+
 for trial=1:Realizaciones %Empieza el Monte Carlo
     v=randn(4,kmax);%Señales aleatorios de media nula y varianza unidad.
     w=randn(2,kmax);
@@ -94,15 +101,15 @@ for trial=1:Realizaciones %Empieza el Monte Carlo
         fi(trial,ki+1)=x(3);
         fi_p(trial,ki+1)=x(4);
     end
-    Jn_(trial,ki+1)=Jn_(trial,ki+1)+x'*S*x;
+    Jn_(trial,ki+1)=Jn_(trial,ki+1)+x'*Qcomp*x;
     u(trial,ki+1)=-Kx(1,:)*[x_hat]-Kv(1,:)*[v(:,ki)];
 end
 
-Jn=mean(Jn_);disp(['El valor de costo es Jn(end)=' num2str(Jn(end)) '.fi(1)=' num2str(fi(1)) '.']);
+Jn=mean(Jn_);disp(['Luenberger: El valor de costo es Jn(end)=' num2str(Jn(end)) '.fi(1)=' num2str(fi(1)) '. \sigma = ' num2str(sigma)]);
 %% Graficos
 t=t*Ts;
 TamanioFuente=14;
-figure;
+figure(1);
 subplot(3,2,2);hold on;grid on;title('Ángulo \phi','FontSize',TamanioFuente);
 plot(t,mean(fi),'b');plot(t,mean(fi)+.5*sqrt(var(fi)),'r');plot(t,mean(fi)-.5*sqrt(var(fi)),'r');
 subplot(3,2,4);hold on;grid on; title('Velocidad ángulo \phi_p','FontSize',TamanioFuente);
@@ -113,6 +120,6 @@ subplot(3,2,3);hold on; grid on;title('Velocidad carro \delta_p','FontSize',Tama
 plot(t,mean(d_p),'b');plot(t,mean(d_p)+.5*sqrt(var(d_p)),'r');plot(t,mean(d_p)-.5*sqrt(var(d_p)),'r');
 subplot(3,1,3); grid on;title('Acción de control','FontSize',TamanioFuente);xlabel('Tiempo en Seg.','FontSize',TamanioFuente);hold on;
 plot(t,mean(u),'b');plot(t,mean(u)+.5*sqrt(var(u)),'r');plot(t,mean(u)-.5*sqrt(var(u)),'r');
-
+disp(['tiempo de ejecucion :' num2str(toc) ' [seg].']);
 % figure;
 % plot(t,fi,'b');
