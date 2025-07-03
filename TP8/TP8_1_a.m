@@ -16,7 +16,7 @@ u(1)=0; %accion de control
 x= [d(1);d_p(1);fi(1);fi_p(1)];
 x0=x;
 
-%VersiÛn linealizada en el equilibrio inestable. Sontag Pp 104. 
+%Versi√≥n linealizada en el equilibrio inestable. Sontag Pp 104. 
 Mat_Ac=[0 1 0 0;0 -Fricc/M -m*g/M 0;0 0 0 1;0 Fricc/(long*M) g*(m+M)/(long*M) 0];
 Mat_Bc=[0; 1/M; 0; -1/(long*M)];
 Mat_Cc=[1 0 0 0; 0 0 1 0];
@@ -34,7 +34,7 @@ Mat_Bd=sys_d.b;
 Mat_Cd=sys_d.c;
 
 %% controlador DLQG
-% Q=diag([1e2 1e1 1e6 1e1]);R=1e1;%Matrices de diseÒo del controlador DLQG
+% Q=diag([1e2 1e1 1e6 1e1]);R=1e1;%Matrices de dise√±o del controlador DLQG
 % % Q=diag([1e1 1e1 1e5 1e5]);R=1e2;
 % Kdlqr = dlqr(Mat_Ad,Mat_Bd,Q,R); %ganacia del controlador
 % disp('Polos de dlqr en:')
@@ -47,7 +47,7 @@ auto_val=eig(Mat_Ac);
 c_ai=conv(conv(conv([1 -auto_val(1)],[1 -auto_val(2)]),[1 -auto_val(3)]),[1 -auto_val(4)]); %= poly(eig(Mat_A)) 
 Mat_W=[;c_ai(4) c_ai(3) c_ai(2) 1;c_ai(3) c_ai(2) 1 0;c_ai(2) 1 0 0;1 0 0 0]; 
 Mat_T=Mat_M*Mat_W;% T=Q=Co*Toeplitz 
-A_controlable=inv(Mat_T)*Mat_Ac*Mat_T; %VerificaciÛn de que T estÈ bien 
+A_controlable=inv(Mat_T)*Mat_Ac*Mat_T; %Verificaci√≥n de que T est√© bien 
 a4=-A_controlable(4,1);%a4 
 a3=-A_controlable(4,2); 
 a2=-A_controlable(4,3); 
@@ -73,7 +73,7 @@ disp('Polos de HJB en:')
 eig(Mat_Ac-Mat_Bc*K_HJB)
 
 %% Obsevador de Luenberger
-%C·lculo del Observador--------------------------------------------------- 
+%C√°lculo del Observador--------------------------------------------------- 
 A_o=Mat_Ad'; 
 B_o=Mat_Cd'; 
 C_o=Mat_Bd'; 
@@ -82,7 +82,7 @@ Qo=diag([1e0 1e0 1e0 1e0]);Ro=diag([1e-1, 1e-1]);
 Ko= (dlqr(A_o,B_o,Qo,Ro))'; %ganancia del observador
 %%
 % forzador=10000; %limit la accion de accion de control
-Qcomp=eye(4);%Para comparar el desempeÒo de los controladores
+Qcomp=eye(4);%Para comparar el desempe√±o de los controladores
 %% Monte Carlo
 % Con sigma 0, 0.01, 0.02, 0.05 y 0.1
 % sigma= 0.1;color_m='b';color_v='m';
@@ -92,7 +92,7 @@ sR=sigma; %Para G. Covarianza del ruido de medicion sigma=sqrt(sR)
 F_=sQ*eye(4); %Covarianza del ruido de estado Sigma=sqrt(sQ)
 G_=sR;
 % S=Q;
-% P=S; %condiciÛn inicial de P
+% P=S; %condici√≥n inicial de P
 kmax=2000;
 Realizaciones=50; %Cantidad de realizaciones para el Monte Carlo.
 Kx=zeros(kmax,4);
@@ -126,13 +126,13 @@ for h_k=1:5000
     P33(h_k)=P_Kalman(3,3);
     P44(h_k)=P_Kalman(4,4);
 end
-% figure(4);semilogy(P11);hold on;semilogy(P22,'g');semilogy(P33,'c');semilogy(P44,'r');title('EvoluciÛn de P_1_1,P_2_2,P_3_3 y P_4_4.')
+% figure(4);semilogy(P11);hold on;semilogy(P22,'g');semilogy(P33,'c');semilogy(P44,'r');title('Evoluci√≥n de P_1_1,P_2_2,P_3_3 y P_4_4.')
 % xlabel('Iteraciones');
 disp('Polos de Kalman en:')
 EK=abs(eig(Mat_Ac-K_Kalman*Mat_Cc))
 %%
 for trial=1:Realizaciones %Empieza el Monte Carlo
-    v=randn(4,kmax);%SeÒales aleatorios de media nula y varianza unidad.
+    v=randn(4,kmax);%Se√±ales aleatorios de media nula y varianza unidad.
     w=randn(2,kmax);
     x=x0+F_*v(:,1);
     x_hat=[0;0;0;0];% variables estado observador 
@@ -174,20 +174,20 @@ Jn=mean(Jn_);disp(['Kalman: El valor de costo es Jn(end)=' num2str(Jn(end)) '.fi
 t=t*Ts;
 TamanioFuente=14;
 figure(1);
-subplot(3,2,2);hold on;grid on;title('¡ngulo \phi','FontSize',TamanioFuente);
+subplot(3,2,2);hold on;grid on;title('√Ångulo \phi','FontSize',TamanioFuente);
 plot(t,mean(fi),color_m);plot(t,mean(fi)+.5*sqrt(var(fi)),color_v);plot(t,mean(fi)-.5*sqrt(var(fi)),color_v);
-subplot(3,2,4);hold on;grid on; title('Velocidad ·ngulo \phi_p','FontSize',TamanioFuente);
+subplot(3,2,4);hold on;grid on; title('Velocidad √°ngulo \phi_p','FontSize',TamanioFuente);
 plot(t,mean(fi_p),color_m);plot(t,mean(fi_p)+.5*sqrt(var(fi_p)),color_v);plot(t,mean(fi_p)-.5*sqrt(var(fi_p)),color_v);
-subplot(3,2,1);hold on; grid on;title('PosiciÛn carro \delta','FontSize',TamanioFuente);hold on;
+subplot(3,2,1);hold on; grid on;title('Posici√≥n carro \delta','FontSize',TamanioFuente);hold on;
 plot(t,mean(d),color_m');plot(t,mean(d)+.5*sqrt(var(d)),color_v);plot(t,mean(d)-.5*sqrt(var(d)),color_v);
 subplot(3,2,3);hold on; grid on;title('Velocidad carro \delta_p','FontSize',TamanioFuente);hold on;
 plot(t,mean(d_p),color_m);plot(t,mean(d_p)+.5*sqrt(var(d_p)),color_v);plot(t,mean(d_p)-.5*sqrt(var(d_p)),color_v);
-subplot(3,1,3); grid on;title('AcciÛn de control','FontSize',TamanioFuente);xlabel('Tiempo en Seg.','FontSize',TamanioFuente);hold on;
+subplot(3,1,3); grid on;title('Acci√≥n de control','FontSize',TamanioFuente);xlabel('Tiempo en Seg.','FontSize',TamanioFuente);hold on;
 plot(t,mean(u),color_m);plot(t,mean(u)+.5*sqrt(var(u)),color_v);plot(t,mean(u)-.5*sqrt(var(u)),color_v);
  disp(['tiempo de ejecucion :' num2str(toc) ' [seg].']);
 % figure;hold on;
-% subplot(2,2,1);hold on; plot(mean(fi),mean(fi_p),color); grid on;xlabel('¡ngulo','FontSize',TamanioFuente);ylabel('Velocidad angular','FontSize',TamanioFuente);hold on;
-% subplot(2,2,2);hold on; plot(d,d_p,color); grid on;xlabel('PosiciÛn carro','FontSize',TamanioFuente);ylabel('Velocidad carro','FontSize',TamanioFuente);hold on;
+% subplot(2,2,1);hold on; plot(mean(fi),mean(fi_p),color); grid on;xlabel('√Ångulo','FontSize',TamanioFuente);ylabel('Velocidad angular','FontSize',TamanioFuente);hold on;
+% subplot(2,2,2);hold on; plot(d,d_p,color); grid on;xlabel('Posici√≥n carro','FontSize',TamanioFuente);ylabel('Velocidad carro','FontSize',TamanioFuente);hold on;
 % subplot(2,2,3);hold on;
-% plot(t,Jn,color);plot(t,Jmin*ones(size(t)),colorc);ylabel('AcumulaciÛn de costo','FontSize',TamanioFuente);xlabel('Tiempo en Seg.','FontSize',TamanioFuente);
-% subplot(2,2,4);hold on; plot(abs(Ea)');ylabel('Polos de lazo cerrado','FontSize',TamanioFuente);xlabel('Etapas de iteraciÛn','FontSize',TamanioFuente);
+% plot(t,Jn,color);plot(t,Jmin*ones(size(t)),colorc);ylabel('Acumulaci√≥n de costo','FontSize',TamanioFuente);xlabel('Tiempo en Seg.','FontSize',TamanioFuente);
+% subplot(2,2,4);hold on; plot(abs(Ea)');ylabel('Polos de lazo cerrado','FontSize',TamanioFuente);xlabel('Etapas de iteraci√≥n','FontSize',TamanioFuente);
